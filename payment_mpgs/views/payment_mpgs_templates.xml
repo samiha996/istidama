@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Submitted by Odoo's payment form: sends the donor to the checkout page below. -->
+    <template id="redirect_form">
+        <form t-att-action="api_url" method="get">
+            <input type="hidden" name="reference" t-att-value="reference"/>
+            <input type="hidden" name="access_token" t-att-value="access_token"/>
+        </form>
+    </template>
+
+    <!-- Loads Mastercard's checkout.js and opens the Hosted Payment Page. -->
+    <template id="checkout_page">
+        <t t-out="'&lt;!DOCTYPE html&gt;'"/>
+        <html>
+            <head>
+                <meta charset="utf-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                <meta name="robots" content="noindex"/>
+                <title>Redirecting to secure payment…</title>
+                <style>
+                    body { font-family: system-ui, sans-serif; display: flex; align-items: center;
+                           justify-content: center; min-height: 90vh; color: #333; }
+                    .box { text-align: center; max-width: 28rem; padding: 1rem; }
+                </style>
+            </head>
+            <body t-att-data-session-id="session_id" t-att-data-cancel-url="cancel_url">
+                <div class="box">
+                    <p>Redirecting you to the bank's secure payment page…</p>
+                    <noscript><p>JavaScript is required to continue to the payment page.</p></noscript>
+                    <p><a t-att-href="cancel_url">Cancel and return to the website</a></p>
+                </div>
+                <script>
+                    function mpgsErrorCallback(error) {
+                        console.error('MPGS checkout error', JSON.stringify(error));
+                        window.location.href = document.body.dataset.cancelUrl;
+                    }
+                    function mpgsCancelCallback() {
+                        window.location.href = document.body.dataset.cancelUrl;
+                    }
+                    function mpgsStart() {
+                        Checkout.configure({ session: { id: document.body.dataset.sessionId } });
+                        Checkout.showPaymentPage();
+                    }
+                </script>
+                <script t-att-src="script_url"
+                        data-error="mpgsErrorCallback"
+                        data-cancel="mpgsCancelCallback"
+                        onload="mpgsStart()"
+                        onerror="mpgsErrorCallback('script_load_failed')"/>
+            </body>
+        </html>
+    </template>
+
+</odoo>

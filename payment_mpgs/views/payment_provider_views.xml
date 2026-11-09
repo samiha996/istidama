@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="payment_provider_form" model="ir.ui.view">
+        <field name="name">MPGS Provider Form</field>
+        <field name="model">payment.provider</field>
+        <field name="inherit_id" ref="payment.payment_provider_form"/>
+        <field name="arch" type="xml">
+            <group name="provider_credentials" position="inside">
+                <group invisible="code != 'mpgs'">
+                    <field name="mpgs_merchant_id"
+                           required="code == 'mpgs' and state != 'disabled'"/>
+                    <field name="mpgs_api_password"
+                           required="code == 'mpgs' and state != 'disabled'"
+                           password="True"/>
+                    <field name="mpgs_gateway_host"
+                           required="code == 'mpgs' and state != 'disabled'"/>
+                    <field name="mpgs_api_version"
+                           required="code == 'mpgs' and state != 'disabled'"/>
+                    <field name="mpgs_webhook_secret" password="True"/>
+                    <field name="mpgs_merchant_name"/>
+                </group>
+            </group>
+        </field>
+    </record>
+
+</odoo>
