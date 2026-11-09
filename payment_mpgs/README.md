@@ -58,7 +58,8 @@ The **portal login** (Merchant ID + operator + password + Microsoft Authenticato
 It never goes into Odoo.
 
 - **API password:** Admin → Integration Settings → Edit (Integration Authentication) →
-  check *Password 1* → **Generate New** → Submit. Copy it. This is what Odoo uses.
+  check *Password 1* → **Generate New**, tick **Enable Integration Access Via Password** → Submit.
+  Copy it. This is what Odoo uses (API user `merchant.<Merchant ID>`).
 - **Webhooks (recommended):** Admin → Webhook Notifications.
   - URL: `https://<your-domain>/payment/mpgs/webhook`
   - Format: **REST-JSON**
@@ -72,7 +73,7 @@ It never goes into Odoo.
 | Merchant ID | `TESTISTIDAMA` (see note below) |
 | API Password | the Integration Authentication password |
 | Gateway Host | `test-bobsal.gateway.mastercard.com` |
-| API Version | `100` (must be ≥ 63; use the version the bank certifies) |
+| API Version | `73` (the version in Bank of Beirut's integration guide; must be ≥ 63) |
 | Webhook Notification Secret | from Merchant Administration |
 | Name on Payment Page | e.g. `ISTIDAMA` |
 
@@ -95,13 +96,17 @@ Website → New Page "Donate" → drag the **Donation** block. In its options:
 - set Custom Amount to *Input*;
 - set the recipient email for staff notices.
 
-Add the page to the menu.
+Add the page to the menu. Bank of Beirut's presentation also asks merchants to show its logos on
+the payment page: https://www.bankofbeirut.com/misc/BOB_Logo200X100.jpg and
+https://www.bankofbeirut.com/misc/BOB_eCommerce.gif (add them as images in the Donate page).
 
 ## Test (test mode)
 
-Mastercard's standard test cards are typically Mastercard `5123450000000008` or Visa
-`4508750015741019`, with CVV `100`. The **expiry date** chooses the result: `01/39` approved,
-`05/39` declined. Confirm against the bank's test page (linked in their email).
+On the test gateway the **expiry date and CVV choose the result**, not the card number. Bank of
+Beirut's 2018 presentation shows `05/21` approved and `05/22` declined (CVV `100`), but those dates
+are now in the past. Use the current values from the bank's test page (link in their email), which
+in today's Mastercard gateways are typically `01/39` approved and `05/39` declined, CVV `100`, with
+card `5123450000000008`.
 
 - [ ] Custom amount (e.g. 37.50): the same amount shows on the gateway page, the Odoo transaction and Merchant Administration.
 - [ ] Approved card: transaction *Confirmed*, one donor email, one staff email, one Payment. Reloading the return URL changes nothing.

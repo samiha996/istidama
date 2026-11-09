@@ -8,9 +8,9 @@ https://developer.mastercard.com/mastercard-gateway/documentation/api-reference/
 # confirmed by the bank and entered on the provider before going live.
 DEFAULT_GATEWAY_HOST = 'test-bobsal.gateway.mastercard.com'
 
-# INITIATE_CHECKOUT requires API version 63 or later. Change on the provider if the bank
-# certifies a different version.
-DEFAULT_API_VERSION = '100'
+# Version used in Bank of Beirut's "BOB Gateway Integration" guide. INITIATE_CHECKOUT requires
+# API version 63 or later.
+DEFAULT_API_VERSION = '73'
 MIN_API_VERSION = 63
 
 REQUEST_TIMEOUT = 20  # seconds
